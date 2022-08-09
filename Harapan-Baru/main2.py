@@ -3,9 +3,9 @@ import pickle
 import cvzone
 import numpy as np
 
-cap = cv2.VideoCapture('carPark.mp4')
-width, height = 103, 43
-with open('polygons', 'rb') as f:
+cap = cv2.VideoCapture('carPark.h264')
+width, height = 88, 188
+with open('CarParkPos', 'rb') as f:
     posList = pickle.load(f)
 
 

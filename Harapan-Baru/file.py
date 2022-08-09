@@ -5,15 +5,14 @@ import numpy as np
 import picamera
 
 # Video feed
-#cap = cv2.VideoCapture('carPark.h264')
+# cap = cv2.VideoCapture('carPark.h264')
 
-#with open('CarParkPos', 'rb') as f:
-    #posList = pickle.load(f)
+# with open('CarParkPos', 'rb') as f:
+#     posList = pickle.load(f)
 
-#width, height = 88, 188
+# width, height = 88, 188
 
 def main():
-    
         
     # Video feed
     cap = cv2.VideoCapture('output.h264')
@@ -37,12 +36,7 @@ def main():
             if count < 900:
                 color = (0, 255, 0)
                 thickness = 5
-                #print(spaceCounter)
                 spaceCounter += 1
-                
-                #parking = []
-                #parking.append(spaceCounter)
-                #print(parking)
             else:
                 color = (0, 0, 255)
                 thickness = 2
@@ -55,29 +49,23 @@ def main():
                                thickness=5, offset=20, colorR=(0,200,0))
     
     while True:
-        try :
-            
-            if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
-                cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            success, img = cap.read()
-            imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            imgBlur = cv2.GaussianBlur(imgGray, (3, 3), 1)
-            imgThreshold = cv2.adaptiveThreshold(imgBlur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                                 cv2.THRESH_BINARY_INV, 25, 16)
-            imgMedian = cv2.medianBlur(imgThreshold, 5)
-            kernel = np.ones((3, 3), np.uint8)
-            imgDilate = cv2.dilate(imgMedian, kernel, iterations=1)
 
-            checkParkingSpace(imgDilate)
-            cv2.imshow("Image", img)
-            filename = 'output.jpg'
-            cv2.imwrite(filename, img)
-            # cv2.imshow("ImageBlur", imgBlur)
-            # cv2.imshow("ImageThres", imgMedian)
-            cv2.waitKey(10)
-        except :
-            
-            return f"balik lagi"
+        if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+        success, img = cap.read()
+        imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        imgBlur = cv2.GaussianBlur(imgGray, (3, 3), 1)
+        imgThreshold = cv2.adaptiveThreshold(imgBlur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                             cv2.THRESH_BINARY_INV, 25, 16)
+        imgMedian = cv2.medianBlur(imgThreshold, 5)
+        kernel = np.ones((3, 3), np.uint8)
+        imgDilate = cv2.dilate(imgMedian, kernel, iterations=1)
+
+        checkParkingSpace(imgDilate)
+        cv2.imshow("Image", img)
+        # cv2.imshow("ImageBlur", imgBlur)
+        # cv2.imshow("ImageThres", imgMedian)
+        cv2.waitKey(1)
     
 
 # while True:
@@ -104,10 +92,8 @@ if __name__ == '__main__':
     camera = picamera.PiCamera()
     camera.resolution = (640, 480)
     camera.framerate = (30)
-    while True :
-        
-        camera.start_recording('output.h264')
-        camera.wait_recording(0.1)
-        camera.stop_recording()
-        main()
+    camera.start_recording('output.h264')
+    camera.wait_recording(30)
+    camera.stop_recording()
+    main()
     #time.sleep(1)
